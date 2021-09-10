@@ -3,6 +3,8 @@
 const express = require('express');
 const https = require('https');
 const bodyparser = require('body-parser')
+const {apiKey} = require("./api")
+
 
 const app = express();
 app.use(bodyparser.urlencoded({
@@ -15,13 +17,15 @@ app.get("/", function(req, res) {
 
 app.post("/", function(req, res) {
   const cityName = req.body.city
-  const url = "https://api.openweathermap.org/data/2.5/weather?&q="+ cityName+"&units=metric&appid=b04d4bd39468af6d4135951d78d4a816";
+  const url = "https://api.openweathermap.org/data/2.5/weather?&q="+ cityName+"&units=metric&appid="+apiKey;
 
   https.get(url, function(response) {
     console.log(response);
 
     response.on("data", function(data) {
+     
       const weatherData = JSON.parse(data);
+      console.log(weatherData)
       const temp = weatherData.main.temp;
       const weatherDes = weatherData.weather[0].description;
       const icon = weatherData.weather[0].icon;
